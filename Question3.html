@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>Question 3</title>
+		
+		<meta charset="UTF-8">
+		<meta name="author" content="Minvydas Lazauskas">
+		
+	<style>
+		
+		body{
+			background:linen;
+			text-align:center;
+			font-size:8vw;
+		}
+		table{
+			margin:0 auto 0 auto;
+		}
+		td{
+			margin:0;
+		}
+		div{
+			width:12vw;
+			height:12vw;
+			padding:25px;
+			margin:0px;
+			border:1px solid black;
+		}
+	</style>
+		
+		<script>
+				//true for "X" player, false for "O" player
+			var crossTurn = true;
+			var gameOver = false;
+				//All winning combinations in a tic tac toe game
+			var pattern = ["topLeft+top+topRight","topLeft+midLeft+botLeft","botLeft+bot+botRight","botRight+midRight+topRight","topRight+top+topLeft","topLeft+mid+botRight","topRight+mid+botLeft","midLeft+mid+midRight","top+mid+bot"];
+			
+			/*
+			Checks if the game is still running
+			@param receives object of div box that was clicked
+			*/
+			function gameEngine(thisObj){
+				if(gameOver){
+					
+				}else{
+					draw(thisObj)
+				}
+			}
+			/*
+			Draws a knot or a cross depending on boolean value of "crossTurn" variable
+			*/
+			function draw(thisObj){
+					//removes ability to click on a box that was already clicked
+				thisObj.removeAttribute("onclick");
+				
+					//Alternates the "crossTurn" variable so that same player doesnt go twice in a row
+				if(crossTurn){
+					thisObj.textContent = "X";
+					thisObj.style.color = "Blue"
+					crossTurn = false;
+				}else{
+					thisObj.textContent = "O";
+					thisObj.style.color = "Green"
+					crossTurn = true;
+				}
+				checkWinner();
+			}
+			/*
+			Checks whether any of the players has formed a winning pattern
+			*/
+			function checkWinner(){
+					//Go through all winning patterns
+				for(var i = 0; i < pattern.length; i++){
+						//Every pattern is associated with a real box on screen
+						//Splitting an array, returns an array of the split items
+					var box1 = document.getElementsByClassName(pattern[i].split("+")[0])[0];
+					var box2 = document.getElementsByClassName(pattern[i].split("+")[1])[0];
+					var box3 = document.getElementsByClassName(pattern[i].split("+")[2])[0];
+					
+						//When any pattern has all of its boxes filled with matching text e.g "X","O"
+						//Game is stopped and the winning pattern is passed along to be drawn on screen
+					if(box1.textContent === "X" && box2.textContent === "X" && box3.textContent === "X"){
+						gameOver = true;
+						drawWinningGrid(pattern[i]);
+					}else if(box1.textContent === "O" && box2.textContent === "O" && box3.textContent === "O"){
+						gameOver = true;
+						drawWinningGrid(pattern[i]);
+					}
+				}
+			}
+			/*
+			Colours all boxes of a winning pattern
+			@param Pattern that won the game
+			*/
+			function drawWinningGrid(patternObj){
+				var pattern = patternObj.split("+");
+				var textColour = document.getElementsByClassName(pattern[0])[0].style.color;
+				for(var i = 0; i < pattern.length; i++){
+						//Chantes the color of each <div> in i+1 order;
+						//pattern[i])[0], "[0]" because getElementsByClassName returns an array of elements 
+						//even if there is only 1 element with the class name
+					var currPattern = document.getElementsByClassName(pattern[i])[0];
+					currPattern.style.background = "pink";
+				}
+			}
+		</script>
+	</head>
+	<body>
+		<table>
+			<tr class="container">
+				<td><div class="topLeft" onclick="gameEngine(this)"></div></td>
+				<td><div class="top" onclick="gameEngine(this)"></div></td>
+				<td><div class="topRight" onclick="gameEngine(this)"></div></td>
+			</tr>
+			<tr class="container">
+				<td><div class="midLeft" onclick="gameEngine(this)"></div></td>
+				<td><div class="mid" onclick="gameEngine(this)"></div></td>
+				<td><div class="midRight" onclick="gameEngine(this)"></div></td>
+			</tr>
+			<tr class="container">
+				<td><div class="botLeft" onclick="gameEngine(this)"></div></td>
+				<td><div class="bot" onclick="gameEngine(this)"></div></td>
+				<td><div class="botRight" onclick="gameEngine(this)"></div></td>
+			</tr>
+		</table>
+	</body>
+</html>
